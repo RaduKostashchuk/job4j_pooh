@@ -11,13 +11,10 @@ public class TopicService implements Service {
     public Resp process(Req req) {
         Resp result = new Resp("", "204");
         if ("POST".equals(req.httpRequestType())) {
-            for (String topic : queue.keySet()) {
-                if (topic.equals(req.getSourceName())) {
-                    for (String client : queue.get(topic).keySet()) {
-                        queue.get(topic).get(client).add(req.getParam());
-                    }
-                }
-            }
+            queue.get(req.getSourceName())
+                    .forEach(
+                            4,
+                            (k, v) -> v.add(req.getParam()));
         } else if ("GET".equals(req.httpRequestType())) {
             String topic = req.getSourceName();
             queue.putIfAbsent(topic, new ConcurrentHashMap<>());

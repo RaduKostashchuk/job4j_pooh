@@ -15,9 +15,9 @@ public class QueueService implements Service {
             queue.get(topic).add(req.getParam());
             result =  new Resp("", "200");
         } else if ("GET".equals(req.httpRequestType())) {
-            if (queue.get(topic) != null
-                    && queue.get(topic).peek() != null) {
-                result = new Resp(queue.get(topic).poll(), "200");
+            if (queue.get(topic) != null) {
+                String text = queue.get(topic).poll();
+                result = text != null ? new Resp(text, "200") : result;
             }
         }
         return result;
